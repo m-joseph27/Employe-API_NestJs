@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "projects": {
+    "employe-api": {
+      "root": "apps/employe-api",
+      "sourceRoot": "apps/employe-api/src",
+      "projectType": "application",
+      "prefix": "employe-api",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/employe-api",
+            "main": "apps/employe-api/src/main.ts",
+            "tsConfig": "apps/employe-api/tsconfig.app.json",
+            "assets": [
+              "apps/employe-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/employe-api/src/environments/environment.ts",
+                  "with": "apps/employe-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "employe-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/employe-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/employe-api"
+          ],
+          "options": {
+            "jestConfig": "apps/employe-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "employe-api"
+}
