@@ -1,6 +1,10 @@
 import { Controller,
   Post,
-  Body
+  Get,
+  Body,
+  Param,
+  Delete,
+  Put
 } from '@nestjs/common';
 import { EmployesService } from '../services/employe.service';
 
@@ -28,10 +32,64 @@ export class EmployesController {
       department,
       created_at
     );
+    
     return {
       message: 'Employe has been created',
       data,
     };
   }
+
+  @Get('findAll')
+  async getAllEmploye() {
+    const employes = await this.employeService.getAllEmploye();
+
+    return employes;
+  }
+
+  @Get(':id')
+  async getEmployeId(@Param('id') employeId: string) {
+    const employe = await this.employeService.getEmployeId(employeId);
+
+    return employe;
+  }
+
+  @Put(':id')
+  async updateEmploye(
+    @Param('id') employeId: string,
+    @Body('fullname') employeFullname: string,
+    @Body('nickname') employeNickname: string,
+    @Body('age') employeAge: number,
+    @Body('phoneNumber') employePhoneNumber: number,
+    @Body('gender') employeGender: string,
+    @Body('department') employeDepartment: string,
+  ) {
+    const updated_at = new Date;
+    const employe = await this.employeService.updateEmploye(
+      employeId,
+      employeFullname,
+      employeNickname,
+      employeAge,
+      employePhoneNumber,
+      employeGender,
+      employeDepartment
+    );
+    
+    return {
+      message: 'Employe succesfully updated',
+      employe,
+      updated_at
+    }
+  }
+
+  @Delete(':id')
+  async deleteEmploye(@Param('id') employeId: string) {
+    const employe = await this.employeService.deleteEmploye(employeId);
+
+    return {
+      message: 'Employe succesfully deleted',
+      employe
+    };
+  }
+
 
 }
