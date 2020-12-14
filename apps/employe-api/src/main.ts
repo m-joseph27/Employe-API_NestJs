@@ -16,14 +16,14 @@ async function bootstrap() {
   const port = process.env.PORT;
 
   const options = new DocumentBuilder()
-  .setTitle('Employe Api Documentation')
-  .setDescription('To get all Restfull Api Employe')
-  .setVersion('1.0')
-  .addTag('Employe')
-  .build();
+    .setTitle('Employe Api Documentation')
+    .setDescription('To get all Restfull Api Employe')
+    .setVersion('1.0')
+    .addTag('Employe')
+    .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('api', app, document);
 
   await app.listen(port, () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
