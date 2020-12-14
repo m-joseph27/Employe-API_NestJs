@@ -59,6 +59,65 @@
           }
         }
       }
+    },
+    "attendance-api": {
+      "root": "apps/attendance-api",
+      "sourceRoot": "apps/attendance-api/src",
+      "projectType": "application",
+      "prefix": "attendance-api",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/attendance-api",
+            "main": "apps/attendance-api/src/main.ts",
+            "tsConfig": "apps/attendance-api/tsconfig.app.json",
+            "assets": [
+              "apps/attendance-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/attendance-api/src/environments/environment.ts",
+                  "with": "apps/attendance-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "attendance-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/attendance-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/attendance-api"
+          ],
+          "options": {
+            "jestConfig": "apps/attendance-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

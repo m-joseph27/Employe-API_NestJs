@@ -13,13 +13,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT;
+  const port = 3333;
 
   const options = new DocumentBuilder()
-  .setTitle('Employe Api Documentation')
-  .setDescription('To get all Restfull Api Employe')
+  .setTitle('Attendance Api Documentation')
+  .setDescription('To get all Restfull Api Attendance')
   .setVersion('1.0')
-  .addTag('Employe')
+  .addTag('attendance')
   .build();
 
   const document = SwaggerModule.createDocument(app, options);

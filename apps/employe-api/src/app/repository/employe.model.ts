@@ -8,7 +8,7 @@ export const EmployeSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   department: { type: String, required: true },
   created_at: Date
-})
+});
 
 export interface Employe extends mongoose.Document {
   id: string;

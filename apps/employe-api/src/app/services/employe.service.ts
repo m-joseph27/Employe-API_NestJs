@@ -1,6 +1,6 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Employe } from '../models/employe.model';
+import { Employe } from '../repository/employe.model';
 import { Model } from 'mongoose';
 
 @Injectable()
