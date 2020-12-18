@@ -42,7 +42,7 @@ export default class EditEmploye extends React.Component<
     Axios.put(
       `http://localhost:1000/api/employe/${this.state.id}`,
       this.state.values
-    ).then((data) => {
+    ).then(() => {
       setTimeout(() => {
         this.props.history.push('/employe')
       }, 1000);
