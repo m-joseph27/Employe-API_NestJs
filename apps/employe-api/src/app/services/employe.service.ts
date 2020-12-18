@@ -2,6 +2,7 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Employe } from '../repository/employe.model';
 import { Model } from 'mongoose';
+import { QueryOptions } from '../../../../../libs/configs/query-options.query';
 
 @Injectable()
 export class EmployesService {
@@ -34,9 +35,34 @@ export class EmployesService {
     return result;
   }
 
-  async getAllEmploye() {
-    const employes = await this.employeModel.find().exec();
-    return employes;
+  async getAllEmploye(options: QueryOptions) {
+    if (options.fields) {
+      const result = await this.employeModel
+      // to search employe by text
+      .find({ [options.fields]: { $regex: `.*${options.text}.*` }}, (res) => {
+        return res;
+      })
+      .skip(Number(options.offset))
+      .limit(Number(options.limit))
+      .exec();
+      return {
+        message: 'Employes list',
+        Total: result.length,
+        result,
+      };
+    } else {
+      // paginate the result
+      const result = await this.employeModel
+        .find()
+        .skip(Number(options.offset))
+        .limit(Number(options.limit))
+        .exec();
+      return {
+        message: 'Employes list',
+        Total: result.length,
+        result,
+      };
+    }
   }
 
   async getEmployeId(employeId: string) {

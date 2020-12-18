@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 
 export const EmployeSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
+  fullName: { type: String },
   nickName: { type: String },
-  age: { type: Number, required: true },
-  phoneNumber: { type: Number, required: true },
-  gender: { type: String, required: true },
-  department: { type: String, required: true },
+  age: { type: Number },
+  phoneNumber: { type: Number },
+  gender: { type: String },
+  department: { type: String },
   created_at: Date
 });
 

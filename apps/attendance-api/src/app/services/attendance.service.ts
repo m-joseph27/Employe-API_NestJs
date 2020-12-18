@@ -2,6 +2,7 @@ import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Attendance } from '../repository/interface/attendance.interface';
 import { Model } from 'mongoose';
+import { QueryOptions } from '../../../../../libs/configs/query-options.query';
 
 @Injectable()
 export class AttendanceService {
@@ -19,7 +20,7 @@ export class AttendanceService {
     sickLeave: number,
     permissonLeave: number,
     alpha: number,
-    totalAttendance: number,
+    totalAttendance: 30,
     created_at: Date,
   ) {
     const newAttendance = new this.attendanceModel({
@@ -36,9 +37,32 @@ export class AttendanceService {
     return result;
   }
 
-  async getAllAttendance() {
-    const attendances = await this.attendanceModel.find().exec();
-    return attendances;
+  async getAllAttendance(options: QueryOptions) {
+    if (options.fields) {
+      const result = await this.attendanceModel
+      .find({ [options.fields]: { $regex: `.*${options.text}.*` }}, (res) => {
+        return res;
+      })
+      .skip(Number(options.offset))
+      .limit(Number(options.limit))
+      .exec();
+      return {
+        message: 'Attendances List',
+        Total: result.length,
+        result,
+      };
+    } else {
+      const result = await this.attendanceModel
+      .find()
+      .skip(Number(options.offset))
+      .limit(Number(options.limit))
+      .exec();
+      return {
+        message: 'Attendances List',
+        Total: result.length,
+        result,
+      };
+    }
   }
 
   async getAttendance(id: string) {

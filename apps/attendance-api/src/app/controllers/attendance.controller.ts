@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { AttendanceService } from '../services/attendance.service';
 
 @Controller('attendance')
@@ -24,7 +25,7 @@ export class AttendanceController {
       sickLeave,
       permissionLeave,
       alpha,
-      totalAttendance,
+      30,
       created_at
     );
 
@@ -35,8 +36,8 @@ export class AttendanceController {
   }
 
   @Get('findAll')
-  async getAllAttendance() {
-    const attendances = await this.attendanceService.getAllAttendance();
+  async getAllAttendance(@Req() req) {
+    const attendances = await this.attendanceService.getAllAttendance(req.query);
 
     return attendances;
   }
@@ -48,7 +49,7 @@ export class AttendanceController {
     return attendance;
   }
 
-  @Put(':id')
+  @Put('edit/:id')
   async updateAttendance(
     @Param('id') id: string,
     @Body('fullname') fullName: string,

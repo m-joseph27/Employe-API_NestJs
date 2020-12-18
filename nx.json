@@ -28,6 +28,13 @@
     },
     "attendance-api": {
       "tags": []
+    },
+    "employe-web": {
+      "tags": []
+    },
+    "employe-web-e2e": {
+      "tags": [],
+      "implicitDependencies": ["employe-web"]
     }
   }
 }

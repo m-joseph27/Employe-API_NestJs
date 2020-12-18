@@ -4,7 +4,8 @@ import { Controller,
   Body,
   Param,
   Delete,
-  Put
+  Put,
+  Req
 } from '@nestjs/common';
 import { EmployesService } from '../services/employe.service';
 
@@ -40,8 +41,8 @@ export class EmployesController {
   }
 
   @Get('findAll')
-  async getAllEmploye() {
-    const employes = await this.employeService.getAllEmploye();
+  async getAllEmploye(@Req() req) {
+    const employes = await this.employeService.getAllEmploye(req.query);
 
     return employes;
   }

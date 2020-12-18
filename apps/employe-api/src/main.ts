@@ -13,7 +13,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT;
+  app.enableCors();
+  const port = process.env.PORT_1;
 
   const options = new DocumentBuilder()
     .setTitle('Employe Api Documentation')
