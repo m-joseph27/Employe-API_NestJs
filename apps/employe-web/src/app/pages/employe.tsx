@@ -2,6 +2,7 @@ import Axios from 'axios';
 import React, { Component } from 'react';
 import '../styles/employe.scss';
 import { Link, BrowserRouter as Router } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import AttendanceForm from '../components/attendance.form';
 
 class Employe extends Component {
@@ -14,18 +15,35 @@ class Employe extends Component {
     this.state = { employe: [] };
   }
 
-  public componentDidMount(): void {
+  public componentDidMount() {
     Axios.get('http://localhost:1000/api/employe/findAll').then((res) => {
       this.setState({ employe: res.data.result });
     });
   }
 
   public deleteEmploye(id: number) {
-    Axios.delete(`http://localhost:1000/api/employe/${id}`).then((result) => {
-      const index = this.state.employe.findIndex(
-        (employe) => employe.id === id
-      );
-      this.state.employe.splice(index, 1);
+    Swal.fire({
+      title: 'Are You Sure Want To Delete?',
+      text: 'Data will permanently deleted',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: "Yes I'm Sure",
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Axios.delete(`http://localhost:1000/api/employe/${id}`)
+          .then((result) => {
+            Swal.fire('Deleted!', 'Employe Succesesfully Deleted', 'success');
+          })
+          .then(function () {
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          });
+      } else if (res.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'Your data is safe :)', 'error');
+      }
     });
   }
 
@@ -53,12 +71,15 @@ class Employe extends Component {
                   <td>{e.phoneNumber}</td>
                   <td>{e.department}</td>
                   <td className="btn-employe">
-                  <a href={`/edit-employe/${e._id}`}>
-                  <button className="btn-edit-employe">Edit</button>
-                  </a>
-                    <a href="/employe">
-                      <button className="btn-delete-employe" onClick={() => this.deleteEmploye(e._id)} >Delete</button>
+                    <a href={`/edit-employe/${e._id}`}>
+                      <button className="btn-edit-employe">Edit</button>
                     </a>
+                    <button
+                      className="btn-delete-employe"
+                      onClick={() => this.deleteEmploye(e._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

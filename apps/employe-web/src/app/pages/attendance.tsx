@@ -3,8 +3,7 @@ import React, { Component, useEffect, useState, useRef } from 'react';
 import { Link, Route, BrowserRouter as Router } from 'react-router-dom';
 import '../styles/attendance.scss';
 import AttendanceForm from '../components/attendance.form';
-
-
+import Swal from 'sweetalert2';
 
 class Attendance extends Component {
   state = {
@@ -13,24 +12,39 @@ class Attendance extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { attendance: [] }
+    this.state = { attendance: [] };
   }
 
   public componentDidMount(): void {
-    Axios.get('http://localhost:2000/api/attendance/findAll').then( data => {
-      this.setState({ attendance: data.data.result})
-    })
+    Axios.get('http://localhost:2000/api/attendance/findAll').then((data) => {
+      this.setState({ attendance: data.data.result });
+    });
   }
 
   public deleteAttendance(id: number) {
-    Axios.delete(`http://localhost:2000/api/attendance/${id}`)
-    .then(data => {
-      const index = this.state.attendance.findIndex(customer => customer.id === id);
-      this.state.attendance.splice(index, 1);
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+    Swal.fire({
+      title: 'Are You Sure Want To Delete?',
+      text: 'Data will permanently deleted',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: "Yes I'm Sure",
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Axios.delete(`http://localhost:2000/api/attendance/${id}`)
+          .then((result) => {
+            Swal.fire('Deleted!', 'Employe Succesesfully Deleted', 'success');
+          })
+          .then(function () {
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          });
+      } else if (res.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelled', 'Your data is safe :)', 'error');
+      }
+    });
   }
 
   render() {
@@ -59,11 +73,14 @@ class Attendance extends Component {
                 <td>{attendances.totalAttendance}</td>
                 <td className="btn-employe">
                   <a href={`/EditAttendance/${attendances._id}`}>
-                  <button className="btn-edit-employe">Edit</button>
+                    <button className="btn-edit-employe">Edit</button>
                   </a>
-                  <a href="/attendance">
-                  <button onClick={() => this.deleteAttendance(attendances._id)} className="btn-delete-employe">Delete</button>
-                  </a>
+                  <button
+                    onClick={() => this.deleteAttendance(attendances._id)}
+                    className="btn-delete-employe"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

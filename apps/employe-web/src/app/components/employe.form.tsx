@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import '../styles/employe.form.scss';
+import Swal from 'sweetalert2';
 
 export interface IEmploye {
   fullName: string;
@@ -51,18 +52,25 @@ class EmployeForm extends Component<RouteComponentProps, IFormEmploye> {
       values: [...this.state.values, formData],
       loading: false,
     });
-    Axios.post(
-      `http://localhost:1000/api/employe/addEmploye`,
-      formData
-    )
-      .then((res) => [
-        setTimeout(() => {
-          this.props.history.push('/employe');
-        }),
-      ])
-      .catch((err) => {
-        // console.log(err);
-      });
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Add Employe',
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      cancelButtonText: 'Cancel'
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Axios.post(`http://localhost:1000/api/employe/addEmploye`, formData)
+        .then((result) => {
+          Swal.fire('Susses', 'Employe Succesfully Added', 'success')
+        }).then(function() {
+          setTimeout(() => {
+            window.location.href = '/employe'
+          }, 1200);
+        })
+      }
+    })
   };
 
   private handleInputChanges = (e: React.FormEvent<HTMLInputElement>) => {
@@ -149,7 +157,7 @@ class EmployeForm extends Component<RouteComponentProps, IFormEmploye> {
             </div>
           </form>
           <div className="btn-cancel-wrapper">
-            <a href="/attendance">
+            <a href="/employe">
               <button className="btn-cancel">Cancel</button>
             </a>
           </div>

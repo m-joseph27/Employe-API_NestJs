@@ -54,13 +54,13 @@ export class EmployesController {
     return employe;
   }
 
-  @Put(':id')
+  @Put('edit/:id')
   async updateEmploye(
     @Param('id') employeId: string,
     @Body('fullname') employeFullname: string,
     @Body('nickname') employeNickname: string,
     @Body('age') employeAge: number,
-    @Body('phoneNumber') employePhoneNumber: number,
+    @Body('phonenumber') employePhoneNumber: number,
     @Body('gender') employeGender: string,
     @Body('department') employeDepartment: string,
   ) {

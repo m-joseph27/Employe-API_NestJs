@@ -24,7 +24,7 @@ export function App() {
             <Route path="/AttendanceForm" component={AttendanceForm} />
             <Route path={'/EmployeForm'} component={EmployeForm} />
             <Route path={`/edit-employe/:id`} component={EditEmploye} />
-            <Route path={`/EditAttendance/:id`} component={EditAttendance} />
+            <Route path={'/EditAttendance/:id'} component={EditAttendance} />
         </Switch>
         </Router>
       </div>

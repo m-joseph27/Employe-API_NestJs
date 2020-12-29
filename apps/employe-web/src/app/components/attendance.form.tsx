@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../styles/attendance.form.scss';
 
 export interface IAttendance {
@@ -54,18 +55,25 @@ class AttendanceForm extends Component<RouteComponentProps, IFormState> {
       values: [...this.state.values, formData],
       loading: false,
     });
-    Axios.post(
-      `http://localhost:2000/api/attendance/insertAttendance`,
-      formData
-    )
-      .then((res) => [
-        setTimeout(() => {
-          this.props.history.push('/attendance');
-        }),
-      ])
-      .catch((err) => {
-        // console.log(err);
-      });
+
+    Swal.fire({
+      icon: 'question',
+      title: 'Add Attendance',
+      showCancelButton: true,
+      confirmButtonText: 'Save',
+      cancelButtonText: 'Cancel'
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Axios.post(`http://localhost:2000/api/attendance/insertAttendance`, formData)
+        .then((result) => {
+          Swal.fire('Susses', 'Attendance Succesfully Added', 'success')
+        }).then(function() {
+          setTimeout(() => {
+            window.location.href = '/attendance'
+          }, 1200);
+        })
+      }
+    })
   };
 
   private handleInputChanges = (e: React.FormEvent<HTMLInputElement>) => {
